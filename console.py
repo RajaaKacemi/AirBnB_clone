@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 
 import cmd
+import shlex
+import re
+import ast
 from models import storage
 from models.base_model import BaseModel
 
@@ -23,7 +26,7 @@ class HBNBCommand(cmd.Cmd):
     
     def do_create(self, arg):
         """
-        A methode to Create new instance of BaseModel and save it to the JSON file.
+        A method to Create new instance of BaseModel and save it to the JSON file.
         Usage: create <class_name>
         """
         commands = shlex.split(arg)
@@ -32,15 +35,15 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         elif commands[0] not in self.valid_classes:
             print("** class doesn't exist **")
-	else:
-	      try:
-              new_instance = globals()[commands[0]]()
-              storage.save(new_instance)
-              print(new_instance.id)
-                except Exception as e:
-                   print(f"Error: {e}")
+        else:
+            try:
+                new_instance = globals()[commands[0]]()
+                storage.save()
+                print(new_instance.id)
+            except Exception as e:
+                print("Error: {}".format(e))
 
-	def do_show(self, arg):
+    def do_show(self, arg):
         """
         A method to Show the string representation of an instance.
         Usage: show <class_name> <id>
@@ -55,14 +58,13 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             objects = storage.all()
-
             key = "{}.{}".format(commands[0], commands[1])
             if key in objects:
                 print(objects[key])
             else:
                 print("** no instance found **")
-	
-	def do_destroy(self, arg):
+    
+    def do_destroy(self, arg):
         """
         A method to Delete an instance based on the class name and id.
         Usage: destroy <class_name> <id>
@@ -84,7 +86,7 @@ class HBNBCommand(cmd.Cmd):
             else:
                 print("** no instance found **")
 
-	def do_all(self, arg):
+    def do_all(self, arg):
         """
         A method to Print the string representation of all instances or a specific class.
         Usage: <User>.all()
@@ -104,7 +106,7 @@ class HBNBCommand(cmd.Cmd):
                 if key.split('.')[0] == commands[0]:
                     print(str(value))
 
-	def do_update(self, arg):
+    def do_update(self, arg):
         """
         A method to Update an instance by adding or updating an attribute.
         Usage: update <class_name> <id> <attribute_name> "<attribute_value>"
@@ -154,7 +156,6 @@ class HBNBCommand(cmd.Cmd):
                     except Exception:
                         pass
                 else:
-
                     attr_name = commands[2]
                     attr_value = commands[3]
 
@@ -168,3 +169,4 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
+
