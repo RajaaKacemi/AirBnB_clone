@@ -9,11 +9,22 @@ import models
 
 class BaseModel:
     def __init__(self, *args, **kwargs):
+        """
+        A methode to initializes a new instance of BaseModel.
+
+        Args:
+            *args: Variable length argument list.
+            **kwargs: Arbitrary keyword arguments.
+        """
+        # Format for time representation
         time_format = "%Y-%m-%dT%H:%M:%S.%f"
+        
+        # Assign unique identifier and creation/update timestamps
         self.id = str(uuid.uuid4())
         self.created_at = datetime.utcnow()
         self.updated_at = datetime.utcnow()
         
+        # Populate attributes if provided in kwargs
         if kwargs:
             for key, value in kwargs.items():
                 if key == "__class__":
@@ -23,18 +34,22 @@ class BaseModel:
                 else:
                     setattr(self, key, value)
 
+        # Register instance with the storage system
         models.storage.new(self)
 
     def save(self):
         """
-
+        A method saves the current instance to the storage system.
         """
         self.updated_at = datetime.utcnow()
         models.storage.save()
 
     def to_dict(self):
         """
+        A methode converts the instance into a dictionary representation.
 
+        Returns:
+            dict: Dictionary representation of the instance.
         """
         inst_dict = self.__dict__.copy()
         inst_dict["__class__"] = self.__class__.__name__
@@ -45,13 +60,17 @@ class BaseModel:
 
     def __str__(self):
         """
+        Returns a string representation of the instance.
 
+        Returns:
+            str: String representation of the instance.
         """
         class_name = self.__class__.__name__
         return "[{}] ({}) {}".format(class_name, self.id, self.__dict__)
 
 
 if __name__ == "__main__":
+    # Test the BaseModel class
     my_model = BaseModel()
     my_model.name = "My_First_Model"
     my_model.my_number = 89
