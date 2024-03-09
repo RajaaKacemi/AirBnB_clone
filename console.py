@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-
+"""
+Module for the HBNBCommand class, implementing a command-line interpreter
+for managing instances of various classes.
+"""
 import cmd
 import shlex
 import re
@@ -14,8 +17,11 @@ from models.state import State
 from models.city import City
 
 class HBNBCommand(cmd.Cmd):
+    """
+    Command-line interpreter class for managing instances of various classes.
+    """
     prompt = "(hbnb) "
-    valid_classes = ["BaseModel", "User","Amenity", "Place", "Review", "State", "City"]
+    valid_classes = ["BaseModel", "User", "Amenity", "Place", "Review", "State", "City"]
 
     def do_quit(self, arg):
         """Quit command: exit the program"""
@@ -32,7 +38,8 @@ class HBNBCommand(cmd.Cmd):
     
     def do_create(self, arg):
         """
-        A method to Create new instance of BaseModel and save it to the JSON file.
+        Create new instance of a specified class and save it to the JSON file.
+        
         Usage: create <class_name>
         """
         commands = shlex.split(arg)
@@ -51,7 +58,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, arg):
         """
-        A method to Show the string representation of an instance.
+        Show the string representation of an instance.
+        
         Usage: show <class_name> <id>
         """
         commands = shlex.split(arg)
@@ -72,7 +80,8 @@ class HBNBCommand(cmd.Cmd):
     
     def do_destroy(self, arg):
         """
-        A method to Delete an instance based on the class name and id.
+        Delete an instance based on the class name and id.
+        
         Usage: destroy <class_name> <id>
         """
         commands = shlex.split(arg)
@@ -94,9 +103,10 @@ class HBNBCommand(cmd.Cmd):
 
     def do_all(self, arg):
         """
-        A method to Print the string representation of all instances or a specific class.
+        Print the string representation of all instances or a specific class.
+        
         Usage: <User>.all()
-                <User>.show()
+               <User>.show()
         """
         objects = storage.all()
 
@@ -114,7 +124,8 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        A method to Update an instance by adding or updating an attribute.
+        Update an instance by adding or updating an attribute.
+        
         Usage: update <class_name> <id> <attribute_name> "<attribute_value>"
         """
         commands = shlex.split(arg)
