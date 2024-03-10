@@ -164,25 +164,6 @@ class HBNBCommand(cmd.Cmd):
 
                 obj.save()
 
-    def do_all(self, arg):
-        """
-        Print the string representation of all instances or a specific class.
-        Usage: <User>.all()
-                <User>.show()
-        """
-        objects = storage.all()
-
-        commands = shlex.split(arg)
-
-        if len(commands) == 0:
-            for key, value in objects.items():
-                print(str(value))
-        elif commands[0] not in self.valid_classes:
-            print("** class doesn't exist **")
-        else:
-            for key, value in objects.items():
-                if key.split('.')[0] == commands[0]:
-                    print(str(value))
     def do_count(self, arg):
         """
         Counts and retrieves the number of instances of a class
@@ -207,8 +188,28 @@ class HBNBCommand(cmd.Cmd):
                 print("** invalid class name **")
         else:
             print("** class name missing **")
-            
-    def default(self, arg):
+        
+    def do_all(self, arg):
+    """
+    Print the string representation of all instances or a specific class.
+    Usage: <User>.all()
+            <User>.show()
+    """
+    objects = storage.all()
+
+    commands = shlex.split(arg)
+
+    if len(commands) == 0:
+        for key, value in objects.items():
+            print(str(value))
+    elif commands[0] not in self.valid_classes:
+        print("** class doesn't exist **")
+    else:
+        for key, value in objects.items():
+            if key.split('.')[0] == commands[0]:
+                print(str(value))
+
+def default(self, arg):
     """
     Default behavior for cmd module when input is invalid
     """
@@ -252,4 +253,5 @@ class HBNBCommand(cmd.Cmd):
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
+
 
