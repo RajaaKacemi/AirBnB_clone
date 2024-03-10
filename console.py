@@ -42,6 +42,10 @@ class HBNBCommand(cmd.Cmd):
         
         Usage: create <class_name>
         """
+        if not arg:
+            print("** class name missing **")
+            return
+
         commands = shlex.split(arg)
 
         if len(commands) == 0:
@@ -190,11 +194,9 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
         
     def do_all(self, arg):
-    """
-    Print the string representation of all instances or a specific class.
-    Usage: <User>.all()
-            <User>.show()
-    """
+        """
+        Print the string representation of all instances or a specific class.
+        """
     objects = storage.all()
 
     commands = shlex.split(arg)
