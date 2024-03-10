@@ -212,24 +212,14 @@ class HBNBCommand(cmd.Cmd):
                     print(str(value))
 
     def default(self, arg):
-    """
-    Default behavior for cmd module when input is invalid
-    """
-    arg = arg.lower()  # Convert the input to lowercase
-
+        """
+        Default behavior for cmd module when input is invalid
+        """
     arg_list = arg.split('.')
-
-    if len(arg_list) < 2:
-        print("*** Unknown syntax: {}".format(arg))
-        return False
 
     cls_nm = arg_list[0]  # incoming class name
 
     command = arg_list[1].split('(')
-
-    if len(command) < 2:
-        print("*** Unknown syntax: {}".format(arg))
-        return False
 
     cmd_met = command[0]  # incoming command method
 
@@ -253,17 +243,17 @@ class HBNBCommand(cmd.Cmd):
             try:
                 obj_id, arg_dict = split_curly_braces(e_arg)
             except Exception:
-                print("*** Unknown syntax: {}".format(arg))
-                return False
+                pass
             try:
                 call = method_dict[cmd_met]
                 return call("{} {} {}".format(cls_nm, obj_id, arg_dict))
             except Exception:
-                print("*** Unknown syntax: {}".format(arg))
-                return False
+                pass
     else:
         print("*** Unknown syntax: {}".format(arg))
-        return False:
+        return False
+
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
