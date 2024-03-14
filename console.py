@@ -216,22 +216,19 @@ class HBNBCommand(cmd.Cmd):
         Default behavior for cmd module when input is invalid
         """
     arg_list = arg.split('.')
-
     cls_nm = arg_list[0]  # incoming class name
 
     command = arg_list[1].split('(')
-
     cmd_met = command[0]  # incoming command method
-
     e_arg = command[1].split(')')[0]  # extra arguments
 
     method_dict = {
-            'all': self.do_all,
-            'show': self.do_show,
-            'destroy': self.do_destroy,
-            'update': self.do_update,
-            'count': self.do_count
-            }
+        'all': self.do_all,
+        'show': self.do_show,
+        'destroy': self.do_destroy,
+        'update': self.do_update,
+        'count': self.do_count
+    }
 
     if cmd_met in method_dict.keys():
         if cmd_met != "update":
@@ -239,19 +236,22 @@ class HBNBCommand(cmd.Cmd):
         else:
             if not cls_nm:
                 print("** class name missing **")
-                return
+                return False
             try:
                 obj_id, arg_dict = split_curly_braces(e_arg)
             except Exception:
-                pass
+                obj_id = None
+                arg_dict = {}
             try:
                 call = method_dict[cmd_met]
                 return call("{} {} {}".format(cls_nm, obj_id, arg_dict))
             except Exception:
-                pass
+                print("** invalid command **")
+                return False
     else:
         print("*** Unknown syntax: {}".format(arg))
         return False
+
 
 
 
