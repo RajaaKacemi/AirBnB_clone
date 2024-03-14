@@ -210,7 +210,6 @@ class HBNBCommand(cmd.Cmd):
             for key, value in objects.items():
                 if key.split('.')[0] == commands[0]:
                     print(str(value))
-
     def default(self, arg):
         """
         Default behavior for cmd module when input is invalid
