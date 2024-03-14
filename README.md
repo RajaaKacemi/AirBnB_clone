@@ -21,7 +21,7 @@ models/base_model.py : file is the base class of all our models. It contains com
 attributes: id, created_at and updated_at
 methods: save() and to_json()
 
-models/engine : directory will contain all storage classes (using the same prototype). For the moment you will have only one: file_storage.py.
+models/engine : directory will contain all storage classes (using the same prototype). For the moment we have only one: file_storage.py.
 
 
 
