@@ -4,7 +4,7 @@ Module for the HBNBCommand class, implementing a command-line interpreter
 for managing instances of various classes.
 """
 import cmd
-import shlex
+import shlex  # <-- Add this line
 import re
 import ast
 from models import storage
@@ -38,7 +38,7 @@ class HBNBCommand(cmd.Cmd):
     
     def do_create(self, arg):
         """
-        Create new instance of a specified class and save it to the JSON file.
+        A method to Create new instance of a specified class and save it to the JSON file.
         
         Usage: create <class_name>
         """
@@ -62,7 +62,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_show(self, arg):
         """
-        Show the string representation of an instance.
+        A method to Show the string representation of an instance.
         
         Usage: show <class_name> <id>
         """
@@ -84,7 +84,7 @@ class HBNBCommand(cmd.Cmd):
     
     def do_destroy(self, arg):
         """
-        Delete an instance based on the class name and id.
+        A method to Delete an instance based on the class name and id.
         
         Usage: destroy <class_name> <id>
         """
@@ -108,7 +108,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_update(self, arg):
         """
-        Update an instance by adding or updating an attribute.
+        A method to Update an instance by adding or updating an attribute.
         
         Usage: update <class_name> <id> <attribute_name> "<attribute_value>"
         """
@@ -170,7 +170,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_count(self, arg):
         """
-        Counts and retrieves the number of instances of a class
+        A method to Counts and retrieves the number of instances of a class
         usage: <class name>.count()
         """
         objects = storage.all()
@@ -195,7 +195,7 @@ class HBNBCommand(cmd.Cmd):
         
     def do_all(self, arg):
         """
-        Print the string representation of all instances or a specific class.
+        A method to Print the string representation of all instances or a specific class.
         """
         objects = storage.all()
 
@@ -211,5 +211,50 @@ class HBNBCommand(cmd.Cmd):
                 if key.split('.')[0] == commands[0]:
                     print(str(value))
 
+    def default(self, arg):
+        """
+        A method to Default behavior for cmd module when input is invalid
+        """
+        arg_list = arg.split('.')
+
+        cls_nm = arg_list[0]  # incoming class name
+
+        command = arg_list[1].split('(')
+
+        cmd_met = command[0]  # incoming command method
+
+        e_arg = command[1].split(')')[0]  # extra arguments
+
+        method_dict = {
+                'all': self.do_all,
+                'show': self.do_show,
+                'destroy': self.do_destroy,
+                'update': self.do_update,
+                'count': self.do_count
+                }
+
+        if cmd_met in method_dict.keys():
+            if cmd_met != "update":
+                return method_dict[cmd_met]("{} {}".format(cls_nm, e_arg))
+            else:
+                if not cls_nm:
+                    print("** class name missing **")
+                    return
+                try:
+                    obj_id, arg_dict = split_curly_braces(e_arg)
+                except Exception:
+                    obj_id = None
+                    arg_dict = {}
+                try:
+                    call = method_dict[cmd_met]
+                    return call("{} {} {}".format(cls_nm, obj_id, arg_dict))
+                except Exception:
+                    print("** invalid command **")
+                    return False
+        else:
+            print("*** Unknown syntax: {}".format(arg))
+            return False
+
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
+
